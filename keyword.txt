@@ -1,0 +1,41 @@
+#######################################
+# Syntax Coloring Map For EEPROM24CXX
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+EEPROMType	KEYWORD1
+
+#######################################
+# Functions (KEYWORD2)
+#######################################
+
+mem_init	KEYWORD2
+w_int	KEYWORD2
+r_int	KEYWORD2
+w_str	KEYWORD2
+r_str	KEYWORD2
+overwrite	KEYWORD2
+mem_seek	KEYWORD2
+mem_tell	KEYWORD2
+lock_mem	KEYWORD2
+unlock_mem	KEYWORD2
+read_all	KEYWORD2
+wipe_all	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+C24C01	LITERAL1
+C24C02	LITERAL1
+C24C04	LITERAL1
+C24C08	LITERAL1
+C24C16	LITERAL1
+C24C32	LITERAL1
+C24C64	LITERAL1
+C24C128	LITERAL1
+C24C256	LITERAL1
+C24C512	LITERAL1
