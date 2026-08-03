@@ -1,31 +1,20 @@
 #include <EEPROM24CXX.h>
 
-
-#define WP_PIN 5
-
+// Example: Write Protection
+// Shows how to enable/disable hardware write protection if supported.
 
 void setup()
 {
     Serial.begin(115200);
 
+    // Initialize the library for 24C02 devices.
+    mem_init(C24C02);
 
-    mem_init(
-        C24C02,
-        0x50,
-        WP_PIN
-    );
+    // Enable write protection (implementation depends on the board/hardware wiring).
+    write_protect_enable();
 
-
-    lock_mem();
-
-
-    Serial.println("Locked");
-
-
-    unlock_mem();
-
-
-    Serial.println("Unlocked");
+    // Disable write protection to allow writes again.
+    write_protect_disable();
 }
 
 
