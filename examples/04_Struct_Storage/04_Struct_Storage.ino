@@ -1,3 +1,12 @@
+/*
+  examples/04_Struct_Storage/04_Struct_Storage.ino
+  Example: Struct Storage
+  Description: Save and retrieve a C++ struct (e.g., settings/config) to/from EEPROM.
+  Author: AlenKrishna2012
+  Date: 2026-08-03
+  License: MIT (see repository LICENSE)
+*/
+
 #include <EEPROM24CXX.h>
 
 

@@ -1,3 +1,12 @@
+/*
+  examples/07_EEPROM_Erase/07_EEPROM_Erase.ino
+  Example: EEPROM Erase
+  Description: Initialize the EEPROM and erase its contents using erase_all().
+  Author: AlenKrishna2012
+  Date: 2026-08-03
+  License: MIT (see repository LICENSE)
+*/
+
 #include <EEPROM24CXX.h>
 
 // Example: EEPROM Erase

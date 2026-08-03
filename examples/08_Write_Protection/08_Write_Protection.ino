@@ -1,3 +1,12 @@
+/*
+  examples/08_Write_Protection/08_Write_Protection.ino
+  Example: Write Protection
+  Description: Demonstrate enabling and disabling hardware write protection if supported by the device.
+  Author: AlenKrishna2012
+  Date: 2026-08-03
+  License: MIT (see repository LICENSE)
+*/
+
 #include <EEPROM24CXX.h>
 
 // Example: Write Protection

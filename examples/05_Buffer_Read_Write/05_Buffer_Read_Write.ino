@@ -1,3 +1,12 @@
+/*
+  examples/05_Buffer_Read_Write/05_Buffer_Read_Write.ino
+  Example: Buffer Read/Write
+  Description: Write an array of bytes to EEPROM and read them back into a buffer.
+  Author: AlenKrishna2012
+  Date: 2026-08-03
+  License: MIT (see repository LICENSE)
+*/
+
 #include <EEPROM24CXX.h>
 
 // Example: Buffer Read/Write

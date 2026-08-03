@@ -1,3 +1,12 @@
+/*
+  examples/10_Data_Logger/10_Data_Logger.ino
+  Example: Data Logger
+  Description: Simple example showing how to log small pieces of data into EEPROM and read them back.
+  Author: AlenKrishna2012
+  Date: 2026-08-03
+  License: MIT (see repository LICENSE)
+*/
+
 #include <EEPROM24CXX.h>
 
 // Example: Data Logger

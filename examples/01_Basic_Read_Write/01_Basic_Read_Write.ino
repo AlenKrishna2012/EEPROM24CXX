@@ -1,3 +1,12 @@
+/*
+  examples/01_Basic_Read_Write/01_Basic_Read_Write.ino
+  Example: Basic Read and Write
+  Description: Initialize the EEPROM, write a single byte at address 0, read it back, and print the value to Serial.
+  Author: AlenKrishna2012
+  Date: 2026-08-03
+  License: MIT (see repository LICENSE)
+*/
+
 #include <EEPROM24CXX.h>
 
 // Example: Basic Read and Write

@@ -1,3 +1,12 @@
+/*
+  examples/09_Memory_Compare/09_Memory_Compare.ino
+  Example: Memory Compare
+  Description: Compare EEPROM contents against a buffer or pattern and report the result.
+  Author: AlenKrishna2012
+  Date: 2026-08-03
+  License: MIT (see repository LICENSE)
+*/
+
 #include <EEPROM24CXX.h>
 
 // Example: Memory Compare

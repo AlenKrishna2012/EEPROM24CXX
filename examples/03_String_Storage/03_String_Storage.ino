@@ -1,3 +1,12 @@
+/*
+  examples/03_String_Storage/03_String_Storage.ino
+  Example: String Storage
+  Description: Write a null-terminated string to EEPROM and read it back.
+  Author: AlenKrishna2012
+  Date: 2026-08-03
+  License: MIT (see repository LICENSE)
+*/
+
 #include <EEPROM24CXX.h>
 
 // Example: String Storage

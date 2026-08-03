@@ -1,3 +1,12 @@
+/*
+  examples/02_Update_Byte/02_Update_Byte.ino
+  Example: Update Byte
+  Description: Initialize the EEPROM, update a byte at a specific address (only writes if different), then read and print it.
+  Author: AlenKrishna2012
+  Date: 2026-08-03
+  License: MIT (see repository LICENSE)
+*/
+
 #include <EEPROM24CXX.h>
 
 // Example: Update Byte
