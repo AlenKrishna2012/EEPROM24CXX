@@ -20,7 +20,7 @@ void setup()
     mem_init(C24C02);
 
     // Erase the EEPROM memory using the provided helper.
-    erase_all();
+    wipe_all();
 }
 
 
