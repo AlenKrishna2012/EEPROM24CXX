@@ -17,7 +17,7 @@ void setup()
 {
     Serial.begin(115200);
 
-    // Initialize the library for a 24C02 device. Change if using a different chip you have from the list in @README.md.
+    // Initialize the library for a 24C02 device. Change if using a different chip.
     mem_init(C24C02);
 
     // Write the value 123 to EEPROM address 0.

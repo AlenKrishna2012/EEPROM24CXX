@@ -922,8 +922,81 @@ void overwrite
 
 }
 
+// ======================================================
+// RANDOM ACCESS TEMPLATE SUPPORT
+// ======================================================
 
-
+template<typename T>
+void overwrite
+(
+    uint32_t address,
+    const T &value
+)
+{
+
+    const uint8_t *ptr =
+    (const uint8_t *)&value;
+
+
+
+    for(size_t i=0;i<sizeof(T);i++)
+    {
+
+        if(address+i >= EEPROM24CXX_Internal::memorySize)
+            break;
+
+
+
+        writeByte
+        (
+            address+i,
+            ptr[i]
+        );
+
+    }
+
+}
+
+
+
+// ======================================================
+// VERIFY DATA
+// ======================================================
+
+template<typename T>
+bool verify
+(
+    uint32_t address,
+    const T &value
+)
+{
+
+    const uint8_t *ptr =
+    (const uint8_t *)&value;
+
+
+
+    for(size_t i=0;i<sizeof(T);i++)
+    {
+
+        if(address+i >= EEPROM24CXX_Internal::memorySize)
+            return false;
+
+
+
+        if(readByte(address+i) != ptr[i])
+            return false;
+
+    }
+
+
+
+    return true;
+
+}
+
+
+
 // ======================================================
 // WIPE MEMORY REGION
 // ======================================================
