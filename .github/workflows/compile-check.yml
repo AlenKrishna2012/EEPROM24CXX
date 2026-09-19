@@ -1,8 +1,13 @@
-name: Compile Check
+name: Compile Arduino Examples
 
 on:
   push:
+    branches:
+      - Compilation-check
   pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   compile:
@@ -15,7 +20,8 @@ jobs:
       - name: Compile Arduino examples
         uses: arduino/compile-sketches@v1
         with:
+          fqbn: arduino:avr:uno
           sketch-paths: |
-            examples
+            - examples
           libraries: |
             - source-path: ./
