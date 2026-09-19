@@ -1,0 +1,27 @@
+name: Compile Arduino Examples
+
+on:
+  push:
+    branches:
+      - Compilation-check
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compile Arduino examples
+        uses: arduino/compile-sketches@v1
+        with:
+          fqbn: arduino:avr:uno
+          sketch-paths: |
+            - examples
+          libraries: |
+            - source-path: ./
