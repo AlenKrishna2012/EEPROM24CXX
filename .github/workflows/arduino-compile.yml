@@ -2,7 +2,7 @@ name: Arduino compile test
 on:
   push:
     branches:
-      - "fix/library-hardening-1.0.8"
+      - "main"
   pull_request:
 jobs:
   compile:
