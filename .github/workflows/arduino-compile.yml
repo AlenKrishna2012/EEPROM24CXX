@@ -1,68 +1,90 @@
-name: Arduino compile test
+name: Arduino CI
+
 on:
   push:
-    branches:
-      - "main"
+    branches: [main]
   pull_request:
+  workflow_dispatch:
+
 jobs:
   compile:
+    name: Compile (${{ matrix.board_name }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - board_name: Uno
+            fqbn: arduino:avr:uno
+          - board_name: Mega 2560
+            fqbn: arduino:avr:mega
+          - board_name: Leonardo
+            fqbn: arduino:avr:leonardo
+          - board_name: Nano
+            fqbn: arduino:avr:nano
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: arduino/setup-arduino-cli@v2
-      - name: Install AVR core
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Arduino CLI
+        uses: arduino/setup-arduino-cli@v2
+
+      - name: Install AVR platform
         run: |
           arduino-cli core update-index
           arduino-cli core install arduino:avr
-      - name: Install library
+
+      - name: Install library for CI
         run: |
           mkdir -p "$HOME/Arduino/libraries"
-          cp -r . "$HOME/Arduino/libraries/EEPROM24CXX"
-      - name: Create test sketch
+          cp -r "$GITHUB_WORKSPACE" "$HOME/Arduino/libraries/EEPROM24CXX"
+
+      - name: Create API smoke-test sketch
         run: |
-          mkdir -p /tmp/EEPROMCompileTest
-          cat > /tmp/EEPROMCompileTest/EEPROMCompileTest.ino <<'EOF'
+          mkdir -p "$RUNNER_TEMP/EEPROM24CXXSmoke"
+          cat > "$RUNNER_TEMP/EEPROM24CXXSmoke/EEPROM24CXXSmoke.ino" <<'EOF'
           #include <EEPROM24CXX.h>
+          struct TestData { uint16_t number; uint8_t flag; };
           void setup() {
             Serial.begin(9600);
             mem_init(C24C02);
-            uint8_t value = 42, out = 0;
-            write( value );
-            rewind();
-            read(out);
-            writeByte(0, value);
-            readByte(0);
-            updateByte(0, value);
-            overwrite(4, value);
-            read(4, out);
-            verify(4, value);
-            w_str(String("test"));
-            rewind();
-            r_str();
-            uint8_t buffer[4] = {1,2,3,4};
-            w_bytes(buffer, sizeof(buffer));
-            r_bytes(buffer, sizeof(buffer));
-            wipe(0, 8);
-            fill(0, 8, 0);
-            compare(0, 8, 1);
-            wipe_all();
-            read_all();
-            lock_mem();
-            unlock_mem();
-            mem_seek(0);
-            skip(1);
-            mem_back(1);
-            mem_end();
-            peek();
-            position();
-            mem_remaining();
-            available();
-            size();
-            pageSize();
-            is16Bit();
-            usesBlockAddress();
+            uint8_t byteValue = 42, byteOut = 0;
+            uint8_t buffer[4] = {1, 2, 3, 4}, bufferOut[4] = {};
+            TestData data = {1234, 1}, dataOut = {};
+            write(byteValue);
+            rewind(); read(byteOut);
+            writeByte(0, byteValue); readByte(0); updateByte(0, byteValue);
+            overwrite(4, byteValue); read(4, byteOut); verify(4, byteValue);
+            overwrite(8, data); read(8, dataOut); verify(8, data);
+            w_str(String("test")); rewind(); r_str();
+            w_bytes(buffer, sizeof(buffer)); rewind(); r_bytes(bufferOut, sizeof(bufferOut));
+            wipe(0, 8); fill(0, 8, 0); compare(0, 8, 1);
+            wipe_all(); read_all();
+            lock_mem(); unlock_mem();
+            mem_seek(0); skip(1); mem_back(1); mem_end(); peek();
+            position(); mem_remaining(); available(); size(); pageSize();
+            is16Bit(); usesBlockAddress(); EEPROM24CXX_READY();
           }
           void loop() {}
           EOF
-      - name: Compile test sketch
-        run: arduino-cli compile --fqbn arduino:avr:uno --libraries "$HOME/Arduino/libraries" /tmp/EEPROMCompileTest
+
+      - name: Compile API smoke test
+        run: |
+          arduino-cli compile --fqbn "${{ matrix.fqbn }}" --libraries "$HOME/Arduino/libraries" "$RUNNER_TEMP/EEPROM24CXXSmoke"
+
+      - name: Compile every example
+        shell: bash
+        run: |
+          shopt -s nullglob
+          examples=( "$GITHUB_WORKSPACE"/examples/* )
+          if [ ${#examples[@]} -eq 0 ]; then
+            echo "No examples found; skipping example compilation."
+            exit 0
+          fi
+          for example in "${examples[@]}"; do
+            if [ -d "$example" ] && compgen -G "$example/*.ino" > /dev/null; then
+              echo "Compiling example: $example"
+              arduino-cli compile --fqbn "${{ matrix.fqbn }}" --libraries "$HOME/Arduino/libraries" "$example"
+            fi
+          done
