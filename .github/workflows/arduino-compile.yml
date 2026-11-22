@@ -1,0 +1,68 @@
+name: Arduino compile test
+on:
+  push:
+    branches:
+      - "fix/library-hardening-1.0.8"
+  pull_request:
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: arduino/setup-arduino-cli@v2
+      - name: Install AVR core
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr
+      - name: Install library
+        run: |
+          mkdir -p "$HOME/Arduino/libraries"
+          cp -r . "$HOME/Arduino/libraries/EEPROM24CXX"
+      - name: Create test sketch
+        run: |
+          mkdir -p /tmp/EEPROMCompileTest
+          cat > /tmp/EEPROMCompileTest/EEPROMCompileTest.ino <<'EOF'
+          #include <EEPROM24CXX.h>
+          void setup() {
+            Serial.begin(9600);
+            mem_init(C24C02);
+            uint8_t value = 42, out = 0;
+            write( value );
+            rewind();
+            read(out);
+            writeByte(0, value);
+            readByte(0);
+            updateByte(0, value);
+            overwrite(4, value);
+            read(4, out);
+            verify(4, value);
+            w_str(String("test"));
+            rewind();
+            r_str();
+            uint8_t buffer[4] = {1,2,3,4};
+            w_bytes(buffer, sizeof(buffer));
+            r_bytes(buffer, sizeof(buffer));
+            wipe(0, 8);
+            fill(0, 8, 0);
+            compare(0, 8, 1);
+            wipe_all();
+            read_all();
+            lock_mem();
+            unlock_mem();
+            mem_seek(0);
+            skip(1);
+            mem_back(1);
+            mem_end();
+            peek();
+            position();
+            mem_remaining();
+            available();
+            size();
+            pageSize();
+            is16Bit();
+            usesBlockAddress();
+          }
+          void loop() {}
+          EOF
+      - name: Compile test sketch
+        run: arduino-cli compile --fqbn arduino:avr:uno --libraries "$HOME/Arduino/libraries" /tmp/EEPROMCompileTest
