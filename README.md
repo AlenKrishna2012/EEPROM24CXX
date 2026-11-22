@@ -1,8 +1,8 @@
 # EEPROM24CXX Library
 
-An Arduino I2C EEPROM library for external 24Cxx and 24CMxx EEPROM chips.
+An Arduino I2C EEPROM library for external 24Cxx and 24CM01 EEPROM chips.
 
-Supports simple byte access, strings, arrays, structures, data logging, memory utilities, and hardware write protection.
+Supports byte access, strings, buffers, datatypes, bounded memory utilities and write protection.
 
 ---
 
